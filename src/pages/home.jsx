@@ -377,7 +377,7 @@ const HomePage = () => {
         <NavTitleLarge>SN AI Summit</NavTitleLarge>
       </Navbar>
 
-      {/* Session agenda grouped by time slot — each slot is collapsible */}
+      {/* Session agenda grouped by time slot - each slot is collapsible */}
       {!meetings.length && (
         <Block strong inset>
           <p>No sessions are currently available.</p>
@@ -405,7 +405,7 @@ const HomePage = () => {
         ))}
       </List>
 
-      {/* Sticky bottom toolbar — add selected session to calendar */}
+      {/* Sticky bottom toolbar - add selected session to calendar */}
       <Toolbar bottom className="add-toolbar">
         {selectedMeeting ? (
           <>

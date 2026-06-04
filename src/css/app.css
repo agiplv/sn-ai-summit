@@ -4,7 +4,7 @@
   white-space: pre-line;
 }
 
-/* Bottom add-to-calendar toolbar */
+/* Bottom add toolbar */
 .add-toolbar.toolbar {
   height: auto;
   min-height: var(--f7-toolbar-height, 56px);
