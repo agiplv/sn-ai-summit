@@ -1,0 +1,17 @@
+{
+  "name": "SN AI Summit Planner",
+  "short_name": "SN Summit",
+  "description": "Select summit meetings and add them to iOS Calendar.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1f57ff",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "170x179",
+      "type": "image/png"
+    }
+  ]
+}

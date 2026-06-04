@@ -1,0 +1,38 @@
+export const meetings = [
+  {
+    id: 'keynote-ai-era',
+    title: 'Opening Keynote: The New Era of Enterprise AI',
+    speaker: 'ServiceNow Leadership Team',
+    location: 'Main Hall, Stockholm Waterfront',
+    start: '2026-10-14T09:00:00+02:00',
+    end: '2026-10-14T10:00:00+02:00',
+    description: 'Kick off Stockholm Summit 2026 with the main keynote and product vision updates.',
+  },
+  {
+    id: 'workflow-automation',
+    title: 'Breakout: AI-Powered Workflow Automation',
+    speaker: 'Platform Engineering',
+    location: 'Room A2',
+    start: '2026-10-14T11:00:00+02:00',
+    end: '2026-10-14T11:45:00+02:00',
+    description: 'Learn practical patterns for automating enterprise workflows with AI agents.',
+  },
+  {
+    id: 'agentic-ops',
+    title: 'Panel: Agentic Operations in Production',
+    speaker: 'Customer Innovation Panel',
+    location: 'Room B1',
+    start: '2026-10-14T13:30:00+02:00',
+    end: '2026-10-14T14:15:00+02:00',
+    description: 'Hear real-world lessons from teams deploying agentic AI in business-critical operations.',
+  },
+  {
+    id: 'summit-closing',
+    title: 'Closing Session & Networking',
+    speaker: 'SN AI Summit Team',
+    location: 'Main Hall',
+    start: '2026-10-14T16:00:00+02:00',
+    end: '2026-10-14T17:00:00+02:00',
+    description: 'Summit wrap-up and networking session.',
+  },
+]
