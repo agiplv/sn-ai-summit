@@ -6,6 +6,7 @@ import {
   NavTitleLarge,
   List,
   ListItem,
+  ListGroup,
   Block,
   Button,
   Card,
@@ -337,6 +338,26 @@ const buildIcs = (meeting) => {
   ].join('\r\n');
 };
 
+const formatTime = (isoString) => {
+  const date = new Date(isoString);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
+
+const groupByTimeSlot = (items) => {
+  const map = new Map();
+  items.forEach((item) => {
+    const key = `${item.start}–${item.end}`;
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(item);
+  });
+  return Array.from(map.entries()).map(([key, sessions]) => ({
+    label: `${formatTime(sessions[0].start)} – ${formatTime(sessions[0].end)}`,
+    sessions,
+  }));
+};
+
+const timeSlots = groupByTimeSlot(meetings);
+
 const HomePage = () => {
   const [selectedId, setSelectedId] = useState(meetings[0]?.id ?? null);
   const selectedMeeting = useMemo(
@@ -356,47 +377,59 @@ const HomePage = () => {
         <NavTitle>SN AI Summit</NavTitle>
         <NavTitleLarge>SN AI Summit</NavTitleLarge>
       </Navbar>
-      <Block strong inset>
-        <p>Select a session from the full event agenda and add it to your iOS Calendar.</p>
-      </Block>
-      {!meetings.length && (
-        <Block strong inset>
-          <p>No sessions are currently available.</p>
-        </Block>
-      )}
-      <List mediaList inset strongIos dividersIos>
-        {meetings.map((meeting) => (
-          <ListItem
-            key={meeting.id}
-            title={meeting.title}
-            subtitle={`${new Date(meeting.start).toLocaleString()} - ${new Date(meeting.end).toLocaleTimeString()}`}
-            text={meeting.location}
-            radio
-            checked={selectedId === meeting.id}
-            name="meeting"
-            onChange={() => setSelectedId(meeting.id)}
-          />
-        ))}
-      </List>
-      {selectedMeeting && (
-        <Card inset>
-          <CardContent padding>
-            <p><strong>Selected:</strong> {selectedMeeting.title}</p>
-            <p className="session-description">{selectedMeeting.description}</p>
-            <p><strong>Location:</strong> {selectedMeeting.location}</p>
+
+      {/* Sticky preview + add button — always visible without scrolling */}
+      <div className="preview-bar">
+        {selectedMeeting ? (
+          <>
+            <div className="preview-bar__info">
+              <span className="preview-bar__title">{selectedMeeting.title}</span>
+              <span className="preview-bar__meta">
+                {formatTime(selectedMeeting.start)} – {formatTime(selectedMeeting.end)} · {selectedMeeting.location}
+              </span>
+            </div>
             <Button
               fill
+              small
               external
               target="_blank"
               rel="noopener noreferrer"
               href={calendarUrl}
               download={`${selectedMeeting.id}.ics`}
+              className="preview-bar__btn"
             >
-              Add to iOS Calendar
+              Add to Calendar
             </Button>
-          </CardContent>
-        </Card>
+          </>
+        ) : (
+          <p className="preview-bar__empty">Select a session below to add it to your calendar.</p>
+        )}
+      </div>
+
+      {/* Session agenda grouped by time slot */}
+      {!meetings.length && (
+        <Block strong inset>
+          <p>No sessions are currently available.</p>
+        </Block>
       )}
+      <List inset strongIos dividersIos className="session-list">
+        {timeSlots.map(({ label, sessions }) => (
+          <ListGroup key={label}>
+            <ListItem groupTitle title={label} />
+            {sessions.map((meeting) => (
+              <ListItem
+                key={meeting.id}
+                title={meeting.title}
+                after={meeting.location}
+                radio
+                checked={selectedId === meeting.id}
+                name="meeting"
+                onChange={() => setSelectedId(meeting.id)}
+              />
+            ))}
+          </ListGroup>
+        ))}
+      </List>
     </Page>
   );
 };
