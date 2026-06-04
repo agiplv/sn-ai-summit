@@ -407,11 +407,28 @@ const HomePage = () => {
     return groupByTimeSlot(filteredMeetings);
   }, [groupBy, filteredMeetings]);
 
-  const calendarUrl = useMemo(() => {
-    if (!selectedMeeting) return '#';
+  const handleAddToCalendar = () => {
+    if (!selectedMeeting) return;
     const ics = buildIcs(selectedMeeting);
-    return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
-  }, [selectedMeeting]);
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+
+    // iOS PWA standalone mode (WKWebView) blocks data: URI navigation and
+    // ignores the `download` attribute. Opening a blob URL via window.open
+    // hands control to Safari / Calendar.app instead.
+    if (window.navigator.standalone) {
+      window.open(url);
+    } else {
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${selectedMeeting.id}.ics`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    // Delay revocation to allow the browser to start the download/navigation
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
 
   const handleRoomFilter = (room) => {
     setRoomFilter((prev) => (prev === room ? null : room));
@@ -521,12 +538,8 @@ const HomePage = () => {
             <Button
               fill
               small
-              external
-              target="_blank"
-              rel="noopener noreferrer"
-              href={calendarUrl}
-              download={`${selectedMeeting.id}.ics`}
               className="add-toolbar__btn"
+              onClick={handleAddToCalendar}
             >
               Add to Calendar
             </Button>
