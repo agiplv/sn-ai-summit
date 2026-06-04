@@ -1,0 +1,19 @@
+{
+  "cwd": "/tmp/workspace/agiplv/sn-ai-summit",
+  "type": [
+    "pwa",
+    "web"
+  ],
+  "name": "SN AI Summit",
+  "framework": "react",
+  "template": "blank",
+  "cssPreProcessor": false,
+  "bundler": "vite",
+  "theming": {
+    "customColor": false,
+    "color": "#007aff",
+    "darkMode": false,
+    "iconFonts": true
+  },
+  "customBuild": false
+}
