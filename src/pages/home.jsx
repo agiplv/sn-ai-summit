@@ -407,11 +407,14 @@ const HomePage = () => {
     return groupByTimeSlot(filteredMeetings);
   }, [groupBy, filteredMeetings]);
 
-  const calendarUrl = useMemo(() => {
-    if (!selectedMeeting) return '#';
+  const handleAddToCalendar = () => {
+    if (!selectedMeeting) return;
     const ics = buildIcs(selectedMeeting);
-    return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
-  }, [selectedMeeting]);
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    window.location.href = url;
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
 
   const handleRoomFilter = (room) => {
     setRoomFilter((prev) => (prev === room ? null : room));
@@ -521,12 +524,8 @@ const HomePage = () => {
             <Button
               fill
               small
-              external
-              target="_blank"
-              rel="noopener noreferrer"
-              href={calendarUrl}
-              download={`${selectedMeeting.id}.ics`}
               className="add-toolbar__btn"
+              onClick={handleAddToCalendar}
             >
               Add to Calendar
             </Button>
