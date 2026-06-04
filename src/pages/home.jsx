@@ -26,7 +26,7 @@ const meetings = [
   {
     id: 'keynote-ai-control-tower',
     title: 'Keynote: The AI Control Tower for Business Reinvention',
-    description: 'Dave Wright, Chief Innovation Officer, ServiceNow\nPaul Odelberg, Senior Product Owner, IKEA\nJanet William Ibrahim, Manager, Partner Solution Consulting – EMEA NORTH, ServiceNow\nMartin Lindahl, VP Country Leader, ServiceNow',
+    description: 'Dave Wright, Chief Innovation Officer, ServiceNow\nPaul Odelberg, Senior Product Owner, IKEA\nJanet William Ibrahim, Manager, Partner Solution Consulting - EMEA NORTH, ServiceNow\nMartin Lindahl, VP Country Leader, ServiceNow',
     location: 'Keynote Room',
     start: `${summitDate}T10:00:00`,
     end: `${summitDate}T10:45:00`,
@@ -152,7 +152,7 @@ const meetings = [
     end: `${summitDate}T13:50:00`,
   },
   {
-    id: 'ifs-institutional-knowledge',
+    id: 'if-institutional-knowledge',
     title: 'Partner Session: Scaling IF’s Institutional Knowledge through AI Augmentation',
     description: 'Oscar Hjelmer, ServiceNow Solution Architect, The Cloud People\nBjørn Rasmussen, Architect, IF Insurance\nSami Rantanen, Head of Quality & Support Finland, If Vahinkovakuutus Oy\nSuvi Lampinen, Product Owner, If Insurance',
     location: 'Breakout 4',
