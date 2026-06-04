@@ -162,7 +162,7 @@ const meetings = [
   {
     id: 'stena-autonomous-it',
     title: 'Partner Session: Stena’s Journey to Autonomous IT',
-    description: 'Elmer de Valk, CEO, Plat4mation\nPernilla Aponte, Head of Stratagy & Governance, Stena',
+    description: 'Elmer de Valk, CEO, Plat4mation\nPernilla Aponte, Head of Strategy & Governance, Stena',
     location: 'Breakout 1',
     start: `${summitDate}T14:00:00`,
     end: `${summitDate}T14:30:00`,
