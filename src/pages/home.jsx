@@ -377,7 +377,7 @@ const HomePage = () => {
         <Card inset>
           <CardContent padding>
             <p><strong>Selected:</strong> {selectedMeeting.title}</p>
-            <p style={{ whiteSpace: 'pre-line' }}>{selectedMeeting.description}</p>
+            <p className="session-description">{selectedMeeting.description}</p>
             <p><strong>Location:</strong> {selectedMeeting.location}</p>
             <Button
               fill
