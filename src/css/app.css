@@ -4,6 +4,34 @@
   white-space: pre-line;
 }
 
+/* Filter bar */
+.filter-bar.block {
+  margin-bottom: 0;
+  padding: 8px 16px 10px;
+}
+
+.filter-bar__group-toggle {
+  margin-bottom: 8px;
+}
+
+.filter-bar__rooms {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.filter-bar__rooms::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-bar__room-chip.button {
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
 /* Bottom add toolbar */
 .add-toolbar.toolbar {
   height: auto;
