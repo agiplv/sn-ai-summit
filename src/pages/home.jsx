@@ -12,7 +12,7 @@ import {
   Toolbar,
 } from 'framework7-react';
 
-const summitDate = '2026-06-20';
+const summitDate = '2026-06-04';
 
 const meetings = [
   {
