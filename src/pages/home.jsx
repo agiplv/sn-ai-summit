@@ -9,6 +9,7 @@ import {
   AccordionContent,
   Block,
   Button,
+  Segmented,
   Toolbar,
 } from 'framework7-react';
 
@@ -355,20 +356,49 @@ const groupByTimeSlot = (items) => {
   }));
 };
 
-const timeSlots = groupByTimeSlot(meetings);
+const groupByRoom = (items) => {
+  const map = new Map();
+  items.forEach((item) => {
+    if (!map.has(item.location)) map.set(item.location, []);
+    map.get(item.location).push(item);
+  });
+  return Array.from(map.entries()).map(([location, sessions]) => ({
+    label: location,
+    sessions,
+  }));
+};
+
+const allRooms = Array.from(new Set(meetings.map((m) => m.location))).sort();
 
 const HomePage = () => {
   const [selectedId, setSelectedId] = useState(meetings[0]?.id ?? null);
+  const [groupBy, setGroupBy] = useState('time'); // 'time' | 'room'
+  const [roomFilter, setRoomFilter] = useState(null); // null = all, string = specific room
+
   const selectedMeeting = useMemo(
     () => meetings.find((meeting) => meeting.id === selectedId),
     [selectedId],
   );
+
+  const filteredMeetings = useMemo(() => {
+    if (!roomFilter) return meetings;
+    return meetings.filter((m) => m.location === roomFilter);
+  }, [roomFilter]);
+
+  const groups = useMemo(() => {
+    if (groupBy === 'room') return groupByRoom(filteredMeetings);
+    return groupByTimeSlot(filteredMeetings);
+  }, [groupBy, filteredMeetings]);
 
   const calendarUrl = useMemo(() => {
     if (!selectedMeeting) return '#';
     const ics = buildIcs(selectedMeeting);
     return `data:text/calendar;charset=utf-8,${encodeURIComponent(ics)}`;
   }, [selectedMeeting]);
+
+  const handleRoomFilter = (room) => {
+    setRoomFilter((prev) => (prev === room ? null : room));
+  };
 
   return (
     <Page name="home">
@@ -377,14 +407,48 @@ const HomePage = () => {
         <NavTitleLarge>SN AI Summit</NavTitleLarge>
       </Navbar>
 
-      {/* Session agenda grouped by time slot - each slot is collapsible */}
-      {!meetings.length && (
+      {/* Group by + Room filter bar */}
+      <Block strong inset className="filter-bar">
+        <div className="filter-bar__group-toggle">
+          <Segmented strong tag="div">
+            <Button
+              active={groupBy === 'time'}
+              onClick={() => setGroupBy('time')}
+            >
+              By Time
+            </Button>
+            <Button
+              active={groupBy === 'room'}
+              onClick={() => setGroupBy('room')}
+            >
+              By Room
+            </Button>
+          </Segmented>
+        </div>
+        <div className="filter-bar__rooms">
+          {allRooms.map((room) => (
+            <Button
+              key={room}
+              small
+              fill={roomFilter === room}
+              outline={roomFilter !== room}
+              className="filter-bar__room-chip"
+              onClick={() => handleRoomFilter(room)}
+            >
+              {room}
+            </Button>
+          ))}
+        </div>
+      </Block>
+
+      {/* Session agenda grouped by time slot or room - each group is collapsible */}
+      {!groups.length && (
         <Block strong inset>
           <p>No sessions are currently available.</p>
         </Block>
       )}
       <List inset strongIos accordionList className="session-list">
-        {timeSlots.map(({ label, sessions }) => (
+        {groups.map(({ label, sessions }) => (
           <ListItem key={label} accordionItem title={label} className="time-slot-header">
             <AccordionContent>
               <List dividersIos className="session-sublist">
@@ -392,7 +456,9 @@ const HomePage = () => {
                   <ListItem
                     key={meeting.id}
                     title={meeting.title}
-                    after={meeting.location}
+                    after={groupBy === 'room'
+                      ? `${formatTime(meeting.start)} – ${formatTime(meeting.end)}`
+                      : meeting.location}
                     radio
                     checked={selectedId === meeting.id}
                     name="meeting"
