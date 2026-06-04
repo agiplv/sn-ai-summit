@@ -6,11 +6,10 @@ import {
   NavTitleLarge,
   List,
   ListItem,
-  ListGroup,
+  AccordionContent,
   Block,
   Button,
-  Card,
-  CardContent,
+  Toolbar,
 } from 'framework7-react';
 
 const summitDate = '2026-06-20';
@@ -378,13 +377,41 @@ const HomePage = () => {
         <NavTitleLarge>SN AI Summit</NavTitleLarge>
       </Navbar>
 
-      {/* Sticky preview + add button — always visible without scrolling */}
-      <div className="preview-bar">
+      {/* Session agenda grouped by time slot — each slot is collapsible */}
+      {!meetings.length && (
+        <Block strong inset>
+          <p>No sessions are currently available.</p>
+        </Block>
+      )}
+      <List inset strongIos accordionList className="session-list">
+        {timeSlots.map(({ label, sessions }) => (
+          <ListItem key={label} accordionItem title={label} className="time-slot-header">
+            <AccordionContent>
+              <List dividersIos className="session-sublist">
+                {sessions.map((meeting) => (
+                  <ListItem
+                    key={meeting.id}
+                    title={meeting.title}
+                    after={meeting.location}
+                    radio
+                    checked={selectedId === meeting.id}
+                    name="meeting"
+                    onChange={() => setSelectedId(meeting.id)}
+                  />
+                ))}
+              </List>
+            </AccordionContent>
+          </ListItem>
+        ))}
+      </List>
+
+      {/* Sticky bottom toolbar — add selected session to calendar */}
+      <Toolbar bottom className="add-toolbar">
         {selectedMeeting ? (
           <>
-            <div className="preview-bar__info">
-              <span className="preview-bar__title">{selectedMeeting.title}</span>
-              <span className="preview-bar__meta">
+            <div className="add-toolbar__info">
+              <span className="add-toolbar__title">{selectedMeeting.title}</span>
+              <span className="add-toolbar__meta">
                 {formatTime(selectedMeeting.start)} – {formatTime(selectedMeeting.end)} · {selectedMeeting.location}
               </span>
             </div>
@@ -396,40 +423,15 @@ const HomePage = () => {
               rel="noopener noreferrer"
               href={calendarUrl}
               download={`${selectedMeeting.id}.ics`}
-              className="preview-bar__btn"
+              className="add-toolbar__btn"
             >
               Add to Calendar
             </Button>
           </>
         ) : (
-          <p className="preview-bar__empty">Select a session below to add it to your calendar.</p>
+          <p className="add-toolbar__empty">Select a session to add it to your calendar.</p>
         )}
-      </div>
-
-      {/* Session agenda grouped by time slot */}
-      {!meetings.length && (
-        <Block strong inset>
-          <p>No sessions are currently available.</p>
-        </Block>
-      )}
-      <List inset strongIos dividersIos className="session-list">
-        {timeSlots.map(({ label, sessions }) => (
-          <ListGroup key={label}>
-            <ListItem groupTitle title={label} />
-            {sessions.map((meeting) => (
-              <ListItem
-                key={meeting.id}
-                title={meeting.title}
-                after={meeting.location}
-                radio
-                checked={selectedId === meeting.id}
-                name="meeting"
-                onChange={() => setSelectedId(meeting.id)}
-              />
-            ))}
-          </ListGroup>
-        ))}
-      </List>
+      </Toolbar>
     </Page>
   );
 };
