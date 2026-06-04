@@ -12,6 +12,7 @@ import routes from '../js/routes';
 import store from '../js/store';
 
 const MyApp = () => {
+  const baseUrl = import.meta.env.BASE_URL;
 
 
   // Framework7 Parameters
@@ -28,8 +29,8 @@ const MyApp = () => {
       routes: routes,
 
       // Register service worker (only on production build)
-      serviceWorker: process.env.NODE_ENV ==='production' ? {
-        path: '/service-worker.js',
+      serviceWorker: import.meta.env.PROD ? {
+        path: `${baseUrl}service-worker.js`,
       } : {},
   };
 

@@ -6,6 +6,7 @@ import react from '@vitejs/plugin-react';
 const SRC_DIR = path.resolve(__dirname, './src');
 const PUBLIC_DIR = path.resolve(__dirname, './public');
 const BUILD_DIR = path.resolve(__dirname, './www');
+const BASE_PATH = process.env.BASE_PATH || '/';
 export default async () => {
 
   return  {
@@ -14,7 +15,7 @@ export default async () => {
 
     ],
     root: SRC_DIR,
-    base: '',
+    base: BASE_PATH,
     publicDir: PUBLIC_DIR,
     build: {
       outDir: BUILD_DIR,
