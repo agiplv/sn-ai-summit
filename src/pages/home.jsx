@@ -338,7 +338,7 @@ const buildIcs = (meeting) => {
 };
 
 const HomePage = () => {
-  const [selectedId, setSelectedId] = useState(meetings[0]?.id ?? '');
+  const [selectedId, setSelectedId] = useState(meetings[0]?.id ?? null);
   const selectedMeeting = useMemo(
     () => meetings.find((meeting) => meeting.id === selectedId),
     [selectedId],
@@ -359,6 +359,11 @@ const HomePage = () => {
       <Block strong inset>
         <p>Select a session from the full event agenda and add it to your iOS Calendar.</p>
       </Block>
+      {!meetings.length && (
+        <Block strong inset>
+          <p>No sessions are currently available.</p>
+        </Block>
+      )}
       <List mediaList inset strongIos dividersIos>
         {meetings.map((meeting) => (
           <ListItem
